@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,7 +14,7 @@ import { Module, NestModule } from '@nestjs/common';
       useUnifiedTopology: true,
       useCreateIndex: true,
       useFindAndModify: false,
-    }),
+    } as ConnectOptions),
   ],
   controllers: [AppController],
   providers: [],
