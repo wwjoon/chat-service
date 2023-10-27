@@ -41,4 +41,15 @@ export class ChatsGateway
     socket.broadcast.emit('user_connected', username); // broadcast: 연결된 모든 소켓에 데이터를 emit
     return username;
   }
+
+  @SubscribeMessage('submit_chat')
+  handleSubmitChat(
+    @MessageBody() chat: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    socket.broadcast.emit('new_chat', {
+      chat,
+      username: socket.id,
+    });
+  }
 }
