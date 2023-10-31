@@ -1,22 +1,21 @@
-// import mongoose, { ConnectOptions } from 'mongoose';
-import mongoose from 'mongoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-// import { MongooseModule } from '@nestjs/mongoose';
 import { Module, NestModule } from '@nestjs/common';
+import { AppController } from './app.controller';
 import { ChatsModule } from './chats/chats.module';
+import * as mongoose from 'mongoose';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // MongooseModule.forRoot(process.env.MONGODB_URI, {
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    //   useCreateIndex: true,
-    //   useFindAndModify: false,
-    // } as ConnectOptions),
+    MongooseModule.forRoot(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    }),
     ChatsModule,
   ],
   controllers: [AppController],

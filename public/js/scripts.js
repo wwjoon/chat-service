@@ -1,4 +1,4 @@
-const socket = io('/messenger');
+const socket = io('/chattings');
 
 const getElementById = (id) => document.getElementById(id) || null;
 
@@ -15,6 +15,7 @@ socket.on('new_chat', (data) => {
   const { chat, username } = data;
   drawNewChat(`${username}: ${chat}`);
 });
+socket.on('disconnect_user', (username) => drawNewChat(`${username}: bye...`));
 
 //* event callback functions
 const handleSubmit = (event) => {
@@ -23,7 +24,7 @@ const handleSubmit = (event) => {
   if (inputValue !== '') {
     socket.emit('submit_chat', inputValue);
     // 화면에다가 그리기
-    drawNewChat(`me : ${inputValue}`);
+    drawNewChat(`me : ${inputValue}`, true);
     event.target.elements[0].value = '';
   }
 };
@@ -31,13 +32,22 @@ const handleSubmit = (event) => {
 //* draw functions
 const drawHelloStranger = (username) =>
   (helloStrangerElement.innerText = `Hello ${username} Stranger :)`);
-const drawNewChat = (message) => {
+const drawNewChat = (message, isMe = false) => {
   const wrapperChatBox = document.createElement('div');
-  const chatBox = `
-      <div>
-        ${message}
-      </div>
-      `;
+  wrapperChatBox.className = 'clearfix';
+  let chatBox;
+  if (!isMe)
+    chatBox = `
+    <div class='bg-gray-300 w-3/4 mx-4 my-2 p-2 rounded-lg clearfix break-all'>
+      ${message}
+    </div>
+    `;
+  else
+    chatBox = `
+    <div class='bg-white w-3/4 ml-auto mr-4 my-2 p-2 rounded-lg clearfix break-all'>
+      ${message}
+    </div>
+    `;
   wrapperChatBox.innerHTML = chatBox;
   chattingBoxElement.append(wrapperChatBox);
 };
